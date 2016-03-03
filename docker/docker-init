@@ -1,0 +1,38 @@
+#!/bin/bash
+#########################################################################################
+#
+# Script to start up a docker machine and bind it to a host entry
+#
+# Author: Tobias (wennergr@gmail.com)
+#
+
+set -e
+
+VERBOSE=true
+ENV=${1-default}
+
+TLD="docker"
+HOST="${ENV}.${TLD}"
+
+${VERBOSE} && echo "Using docher environment ${ENV}"
+STATUS=$(docker-machine status ${ENV})
+
+${VERBOSE} && echo "Docker machine status: ${STATUS}"
+if [[ ${STATUS} != 'Running' ]]; then
+  echo "Docker machine env \"${ENV}\" is not running. Starting it... (this can take a while)"
+  docker-machine start ${ENV}
+fi
+
+${VERBOSE} && echo "Setting up env"
+eval "$(docker-machine env ${ENV})"
+
+SEARCH_PATTERN="$(docker-machine ip ${ENV}) ${ENV}.${TLD}"
+if grep -Fxq "${SEARCH_PATTERN}" /etc/hosts; then
+  ${VERBOSE} && echo "Machine is reachable at IP: $(docker-machine ip ${ENV}) on ${HOST}"
+else
+  echo "The IP address of $1.docker is missing or different."
+  echo "Adding IP of $1 to /etc/hosts (you may need to enter your password)"
+  sudo -s "/usr/bin/sed -i '' \"/${HOST}/d\" /etc/hosts"
+  sudo -s "echo \"$(docker-machine ip ${ENV}) ${HOST}\" >> /etc/hosts"
+  echo "Added: $(tail -1 /etc/hosts)"
+fi
