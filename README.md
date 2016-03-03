@@ -1,2 +1,2 @@
 # scripts
-Collection of good to have bash scritps
+Collection of good to have everyday scripts
