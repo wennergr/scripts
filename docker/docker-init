@@ -28,7 +28,7 @@ eval "$(docker-machine env ${ENV})"
 
 SEARCH_PATTERN="$(docker-machine ip ${ENV}) ${ENV}.${TLD}"
 if grep -Fxq "${SEARCH_PATTERN}" /etc/hosts; then
-  ${VERBOSE} && echo "Machine is reachable at IP: $(docker-machine ip ${ENV}) on ${HOST}"
+  ${VERBOSE} && echo "Machine is reachable at IP: $(docker-machine ip ${ENV}) and DNS: ${HOST}"
 else
   echo "The IP address of $1.docker is missing or different."
   echo "Adding IP of $1 to /etc/hosts (you may need to enter your password)"
