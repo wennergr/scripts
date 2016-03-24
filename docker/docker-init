@@ -6,9 +6,7 @@
 # Author: Tobias (wennergr@gmail.com)
 #
 
-set -e
-
-VERBOSE=true
+VERBOSE=false
 ENV=${1-default}
 
 TLD="docker"
