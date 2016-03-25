@@ -3,8 +3,6 @@
 #
 # Script to start up a docker machine and bind it to a host entry
 #
-# Author: Tobias (wennergr@gmail.com)
-#
 
 VERBOSE=false
 ENV=${1-default}
